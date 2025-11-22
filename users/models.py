@@ -7,6 +7,7 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     middle_name = models.CharField(max_length=100)
+    full_name = models.CharField(max_length=100)
     balance = models.DecimalField(default=0,max_digits=20,decimal_places=0)
     phone_number = models.CharField(max_length=20,null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -15,4 +16,6 @@ class User(AbstractUser):
     def save(self, *args, **kwargs):
         if self.passport_serial:
             self.username = self.passport_serial.upper()
+        if self.first_name and self.last_name and self.middle_name:
+            self.full_name = f'{self.last_name} {self.first_name} {self.middle_name}'
         super().save(*args,**kwargs)

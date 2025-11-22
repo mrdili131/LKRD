@@ -1,92 +1,97 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
-    <title>Kirish</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login – Bank App</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial, sans-serif;}
+body{
+    background:#f3fff5;
+    color:#111;
+    padding-bottom:80px;
+}
+
+/* TOP BAR */
+.top-bar{
+    background:#0c8c3d;
+    padding:15px 20px;
+    color:white;
+    font-size:22px;
+    font-weight:bold;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.15);
+}
+.back-btn{
+    font-size:26px;
+    cursor:pointer;
+}
+
+.container{
+    max-width:480px;
+    margin:auto;
+    padding:20px;
+}
+
+/* INPUT */
+.input-box{
+    margin-bottom:18px;
+}
+.input-box label{
+    font-size:14px;
+    font-weight:bold;
+    color:#0c8c3d;
+}
+.input-box input{
+    width:100%;
+    padding:14px;
+    margin-top:6px;
+    border-radius:12px;
+    border:1px solid #c8e6cb;
+    font-size:15px;
+    background:white;
+}
+
+/* BUTTON */
+.login-btn{
+    width:100%;
+    padding:15px;
+    background:#0c8c3d;
+    color:white;
+    border:none;
+    border-radius:15px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 3px 10px rgba(0,0,0,0.15);
+}
+</style>
 </head>
+
 <body>
 
-    <div class="main-container">
-        <h1 style="margin:20px;">Lisa Kredit konveyeri</h1>
-        <div class="settings-container">
-            <h1 style="margin-bottom: 20px;background-color: antiquewhite;border-radius: 12px;padding: 10px;">Kirish</h1>
-            <form method="post" action="">
-                {% csrf_token %}
-                <label class="labl" for="passport_serial">Passport Serial</label>
-                <input class="inp" type="text" name="passport_serial" id="passport_serial" placeholder="Login">
-                <label class="labl" for="password">Parol</label>
-                <input class="inp" type="password" name="password" id="password" placeholder="Parol">
-                <button class="login-btn" type="submit">Kirish</button>
-            </form>
-        </div>
+<!-- TOP BAR -->
+<div class="top-bar">
+    LKDR ga kirish
+</div>
+
+<form class="container" method="post">
+    {% csrf_token %}
+    <div class="input-box">
+        <label>Passport seriyasi</label>
+        <input type="text" name="username" placeholder="AD1401300">
     </div>
+
+    <div class="input-box">
+        <label>Parol</label>
+        <input type="password" name="password" placeholder="Parolni kiriting">
+    </div>
+
+    <button class="login-btn" type="submit">Kirish</button>
+</form>
 
 </body>
 </html>
-
-<style>
-    *{
-        margin: 0;
-        padding: 0;
-        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    }
-    .inp{
-        background-color: wheat;
-        color: black;
-        border-radius: 7px;
-        border: 1px solid black;
-        padding: 10px;
-        font-size: 30px;
-    }
-    .labl{
-        font-size: 35px;
-    }
-    nav{
-        background-color: rgb(103, 139, 255);
-        padding: 20px;
-        display: flex;
-        flex-direction:row;
-        justify-content: space-around;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-    }
-    .nav-item:hover{
-        color: rgb(0, 17, 28);
-    }
-    a{
-        color: rgb(255, 255, 255);
-        text-decoration: none;
-    }
-    .settings-container{
-        background-color: #d0ddff;
-        padding: 20px;
-        border-radius: 15px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap:10px;
-        flex-wrap: wrap;
-    }
-    .login-btn{
-        border-radius: 6px;
-        border: 1px solid black;
-        box-shadow: 2px 2px 0 0 rgb(169, 169, 169);
-        padding: 3px;
-        font-size: 40px;
-    }
-    .login-btn:hover{
-        background-color: #c9c9c9;
-    }
-    form{
-        display: flex;
-        flex-direction: column;
-        gap:10px;
-        font-size: 20px;
-    }
-</style>

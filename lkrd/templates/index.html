@@ -3,11 +3,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bank App – Home</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>LKRD</title>
 
 <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial, sans-serif;}
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial, sans-serif;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}
 
     body{
         background:#f3fff5;
@@ -81,6 +81,7 @@
         font-size:12px;
         font-weight:bold;
         cursor:pointer;
+        font-size: 35px;
     }
 
     .actions{
@@ -90,7 +91,7 @@
     }
 
     .action-btn{
-        width:22%;
+        width:fit-content;
         background:white;
         padding:15px 5px;
         border-radius:15px;
@@ -157,26 +158,6 @@
         color:#0c8c3d;
         font-weight:bold;
     }
-
-    /* ORIGINAL BOTTOM NAV */
-    nav{
-        position:fixed;
-        bottom:0;
-        width:100%;
-        background-color:rgb(15,151,0);
-        padding:8px 0;
-        display:flex;
-        justify-content:space-around;
-        align-items:center;
-        z-index:999;
-    }
-
-    nav svg{
-        width:35px;
-        height:35px;
-        fill:#e3e3e3;
-    }
-
 </style>
 </head>
 
@@ -184,37 +165,36 @@
 
 <!-- TOP BAR -->
 <div class="top-bar">
-    <div>MyBank</div>
-    <div class="profile">S</div>
+    <div>LKRD</div>
+    <a href="{% url 'notifications' %}" style="text-decoration: none;" class="profile">{{request.user.first_name|slice:":1"}}</a>
 </div>
 
 <div class="container">
 
     <!-- BALANCE CARD -->
     <div class="card">
-        <h3>Your Balance</h3>
+        <h3>Sizning balansingiz</h3>
         <div class="balance" id="balance">{{user.balance|intcomma}} soʻm</div>
 
         <!-- ✅ ADDED REFRESH BUTTON -->
         <button class="refresh-btn" onclick="refreshBalance()">⟳</button>
 
         <div class="actions">
-            <div class="action-btn">Send</div>
-            <div class="action-btn">Request</div>
-            <div class="action-btn">History</div>
-            <div class="action-btn">Cards</div>
+            <div class="action-btn">Jo'natish</div>
+            <a style="text-decoration: none;" href="{% url 'transactions' %}" class="action-btn">O'tkazmalar</a>
+            <div class="action-btn">Kartalar</div>
         </div>
     </div>
 
     <!-- CURRENCY SECTION -->
     <div class="section">
-        <h2>Exchange Rates</h2>
+        <h2>Valyuta kursi</h2>
 
         <div class="currency-box">
             <div>
                 <b>USD → UZS</b><br>
-                Buy: 12,450<br>
-                Sell: 12,580
+                Sotib olish: 12,450<br>
+                Sotish: 12,580
             </div>
             <div style="font-size:28px;">💵</div>
         </div>
@@ -222,8 +202,8 @@
         <div class="currency-box">
             <div>
                 <b>EUR → UZS</b><br>
-                Buy: 13,320<br>
-                Sell: 13,480
+                Sotib olish: 13,320<br>
+                Sotish: 13,480
             </div>
             <div style="font-size:28px;">💶</div>
         </div>
@@ -231,55 +211,42 @@
 
     <!-- NEWS -->
     <div class="section">
-        <h2>Bank News</h2>
+        <h2>Yangiliklar</h2>
 
         <div class="news-card">
-            <h4>New Cashback Program</h4>
-            <p>Get up to 10% cashback at partner stores.</p>
+            <h4>Keshbek oling!</h4>
+            <p>Endi har bir o'tkazma uchun keshbek.</p>
         </div>
 
         <div class="news-card">
-            <h4>Virtual Card Launched</h4>
-            <p>Create a virtual card instantly for online shopping.</p>
+            <h4>Virtual Visa karta oching</h4>
+            <p>LKRD dan virtual visa karta xizmati.</p>
         </div>
     </div>
 
     <!-- MORE FEATURES -->
     <div class="section">
-        <h2>More Services</h2>
+        <h2>Boshqa servislar</h2>
 
         <div class="features">
-            <div class="feature-item">Top-Up</div>
-            <div class="feature-item">Utilities</div>
-            <div class="feature-item">Savings</div>
-            <div class="feature-item">Loans</div>
-            <div class="feature-item">ATM Finder</div>
-            <div class="feature-item">Investments</div>
+            <div class="feature-item">Hissobni to'ldirish</div>
+            <div class="feature-item">To'lovlar</div>
+            <div class="feature-item">Saqlamalar</div>
+            <a href="{% url 'get_loan' %}" style="text-decoration: none;" class="feature-item">Kredit olish</a>
+            <div class="feature-item">Bankomatlar</div>
+            <div class="feature-item">Sarmoyalar</div>
         </div>
     </div>
 
 </div>
 
 <!-- ORIGINAL BOTTOM NAV -->
-<nav>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-        <path d="M226.67-186.67h140v-246.66h226.66v246.66h140v-380L480-756.67l-253.33 190v380Z"/>
-    </svg>
-
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-        <path d="M478-120q-145 0-249-101-104-101-109-246h67q5 118 88 199t202 81q124 0 210-86t86-210q0-122-86-206t-209-84q-68 0-128 32t-103 83h128v67H135V-810h67v102q52-62 124-97t153-35q75 0 141 28t115 76q48 48 76 114t28 140q0 76-28 141t-78 115q-50 49-115 77t-139 28Zm123-196-153-152v-215h66v187l134 132-47 48Z"/>
-    </svg>
-
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-        <path d="m382-80-19-127q-17-6-35-17t-32-22L178-193 80-365l107-79q-2-17-2-36t2-36L80-595l98-173 118 53q14-12 32-23t35-16l19-126h196l19 127q18 6 36 16t32 23l118-53 98 173-106 78q2 9 2 18.5v18q0 9.5-2 19.5l106 78-98 173-118-53q-14 12-32 22.5T578-207l-19 127H382Zm56-67h84l14-110q32-8 61-24.5T649-321l104 44 39-70-91-67q4-16 6-32t2-34q0-17-2-33t-7-33l91-67-39-71-104 45q-22-25-50.5-41.5T523-638l-14-110h-84l-14 110q-33 7-61.5 23.5T311-639l-104-44-39 70 91 68q-5 17-7 33t-2 32q0 17 2 33t7 32l-91 68 39 70 104-44q23 24 51.5 41t61.5 25l14 110Zm43-200q55 0 94-39t39-95q0-55-39-94.5T480-534q-56 0-95 39.5T346-400q0 56 39 95t96 39Z"/>
-    </svg>
-</nav>
+{% include 'navbar.html' %}
 
 <script>
 function refreshBalance(){
-
-
-    document.getElementById("balance").textContent = newBalance;
+    document.querySelector(".balance").textContent = "0";
+    window.location.reload(true)
 }
 </script>
 

@@ -1,0 +1,65 @@
+<nav>
+    <!-- Home Button -->
+    <a href="{% url 'home' %}">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+            <path d="M226.67-186.67h140v-246.66h226.66v246.66h140v-380L480-756.67l-253.33 190v380Z"/>
+        </svg>
+    </a>
+
+    <!-- Transactions Button -->
+    <a href="{% url 'transactions' %}">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+            <path d="M478-120q-145 0-249-101-104-101-109-246h67q5 118 88 199t202 81q124 0 210-86t86-210q0-122-86-206t-209-84q-68 0-128 32t-103 83h128v67H135V-810h67v102q52-62 124-97t153-35q75 0 141 28t115 76q48 48 76 114t28 140q0 76-28 141t-78 115q-50 49-115 77t-139 28Zm123-196-153-152v-215h66v187l134 132-47 48Z"/>
+        </svg>
+    </a>
+
+    <!-- Profile / User Button -->
+    <a href="{% url 'settings' %}">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+            <path d="m382-80-19-127q-17-6-35-17t-32-22L178-193 80-365l107-79q-2-17-2-36t2-36L80-595l98-173 118 53q14-12 32-23t35-16l19-126h196l19 127q18 6 36 16t32 23l118-53 98 173-106 78q2 9 2 18.5v18q0 9.5-2 19.5l106 78-98 173-118-53q-14 12-32 22.5T578-207l-19 127H382Zm56-67h84l14-110q32-8 61-24.5T649-321l104 44 39-70-91-67q4-16 6-32t2-34q0-17-2-33t-7-33l91-67-39-71-104 45q-22-25-50.5-41.5T523-638l-14-110h-84l-14 110q-33 7-61.5 23.5T311-639l-104-44-39 70 91 68q-5 17-7 33t-2 32q0 17 2 33t7 32l-91 68 39 70 104-44q23 24 51.5 41t61.5 25l14 110Zm43-200q55 0 94-39t39-95q0-55-39-94.5T480-534q-56 0-95 39.5T346-400q0 56 39 95t96 39Z"/>
+        </svg>
+    </a>
+</nav>
+
+<style>
+    /* Bottom Navbar */
+nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: rgb(15,151,0);
+    padding: 8px 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 999;
+    padding-bottom: 30px;
+}
+
+/* Make links uniform */
+nav a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;   /* fixed button size */
+    height: 50px;
+}
+
+/* SVG icons */
+nav svg {
+    width: 40px;
+    height: 40px;
+    fill: #e3e3e3;
+}
+
+/* Optional hover effect */
+nav a:hover svg {
+    fill: #fff;
+}
+
+/* Optional active state */
+nav a.active svg {
+    fill: yellow;
+}
+
+</style>

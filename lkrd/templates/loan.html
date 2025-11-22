@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Loan Request</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>LKRD</title>
 
 <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial, sans-serif;}
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial, sans-serif;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}
     body{
         background:#f3fff5;
         padding-bottom:80px;
@@ -122,62 +123,49 @@
 <!-- TOP BAR -->
 <div class="top-bar">
     <div class="back" onclick="history.back()">←</div>
-    Loan Request
+    LKRD Kredit olish
 </div>
 
 <div class="container">
 
     <!-- REQUEST FORM -->
     <div class="card">
-        <label class="label">Loan Amount (UZS)</label>
-        <input type="number" placeholder="Example: 50,000,000">
+        <label class="label">Summa (UZS)</label>
+        <input type="number" placeholder="Masalan: 50,000,000">
 
-        <label class="label">Loan Purpose</label>
+        <label class="label">Kredit maqsadi</label>
         <select>
-            <option>Car Purchase</option>
-            <option>Home Improvement</option>
-            <option>Business</option>
-            <option>Medical</option>
-            <option>Other</option>
+            <option>Avomashina haridi uchun</option>
+            <option>Uyni ta'mirlash</option>
+            <option>Biznes uchun</option>
+            <option>Tibbiy masalada</option>
+            <option>Boshqalar</option>
         </select>
 
-        <label class="label">Repayment Period</label>
+        <label class="label">To'lov muddati</label>
         <select>
-            <option>6 months</option>
-            <option>12 months</option>
-            <option>24 months</option>
-            <option>36 months</option>
+            <option>12 oy</option>
+            <option>18 oy</option>
+            <option>24 oy</option>
+            <option>36 oy</option>
         </select>
 
-        <label class="label">Passport Photo (optional)</label>
+        <label class="label">Passport rasmi</label>
         <input type="file">
 
-        <button class="submit-btn" onclick="showStatus()">Submit Request</button>
+        <button class="submit-btn" onclick="showStatus()">Jo'natish</button>
     </div>
 
     <!-- WAITING STATUS -->
     <div id="status" class="status-card">
-        <div class="status-title">Your request is being reviewed…</div>
-        <div class="status-text">Our specialists are checking your documents. You will be notified soon.</div>
+        <div class="status-title">Sizning kredit masalangiz ko'rib chiqilmoqda. Kuting!</div>
+        <div class="status-text">Tez orada sizga kredit masalangiz javobi keladi.</div>
     </div>
 
 </div>
 
 <!-- BOTTOM NAV -->
-<nav>
-    <!-- HOME -->
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-        <path d="M226.67-186.67h140v-246.66h226.66v246.66h140v-380L480-756.67l-253.33 190v380Z"/>
-    </svg>
-
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-        <path d="M478-120q-145 0-249-101-104-101-109-246h67q5 118 88 199t202 81q124 0 210-86t86-210q0-122-86-206t-209-84q-68 0-128 32t-103 83h128v67H135V-810h67v102q52-62 124-97t153-35q75 0 141 28t115 76q48 48 76 114t28 140q0 76-28 141t-78 115q-50 49-115 77t-139 28Zm123-196-153-152v-215h66v187l134 132-47 48Z"/>
-    </svg>
-
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-        <path d="m382-80-19-127q-17-6-35-17t-32-22L178-193 80-365l107-79q-2-17-2-36t2-36L80-595l98-173 118 53q14-12 32-23t35-16l19-126h196l19 127q18 6 36 16t32 23l118-53 98 173-106 78q2 9 2 18.5v18q0 9.5-2 19.5l106 78-98 173-118-53q-14 12-32 22.5T578-207l-19 127H382Zm56-67h84l14-110q32-8 61-24.5T649-321l104 44 39-70-91-67q4-16 6-32t2-34q0-17-2-33t-7-33l91-67-39-71-104 45q-22-25-50.5-41.5T523-638l-14-110h-84l-14 110q-33 7-61.5 23.5T311-639l-104-44-39 70 91 68q-5 17-7 33t-2 32q0 17 2 33t7 32l-91 68 39 70 104-44q23 24 51.5 41t61.5 25l14 110Zm43-200q55 0 94-39t39-95q0-55-39-94.5T480-534q-56 0-95 39.5T346-400q0 56 39 95t96 39Z"/>
-    </svg>
-</nav>
+{% include 'navbar.html' %}
 
 <script>
 function showStatus(){
