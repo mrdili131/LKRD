@@ -1,0 +1,253 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Money Transfer</title>
+
+<style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial, sans-serif;}
+
+    body{
+        background:#f3fff5;
+        padding-bottom:80px;
+    }
+
+    /* TOP BAR */
+    .top-bar{
+        background:#0c8c3d;
+        padding:15px 20px;
+        color:white;
+        font-size:22px;
+        font-weight:bold;
+        display:flex;
+        align-items:center;
+        gap:15px;
+        box-shadow:0 2px 10px rgba(0,0,0,0.15);
+    }
+
+    .back-btn{
+        font-size:26px;
+        cursor:pointer;
+        font-weight:bold;
+    }
+
+    .container{
+        max-width:480px;
+        margin:auto;
+        padding:20px;
+    }
+
+    /* SECTIONS */
+    .section{
+        background:white;
+        padding:20px;
+        border-radius:15px;
+        box-shadow:0 2px 8px rgba(0,0,0,0.1);
+        margin-bottom:20px;
+    }
+
+    .section h2{
+        font-size:18px;
+        margin-bottom:12px;
+        color:#0c8c3d;
+    }
+
+    .input-box{
+        display:flex;
+        flex-direction:column;
+        margin-bottom:14px;
+    }
+
+    .input-box label{
+        font-size:14px;
+        color:#0c8c3d;
+        font-weight:bold;
+        margin-bottom:5px;
+    }
+
+    .input-box input, select{
+        padding:14px;
+        border-radius:12px;
+        border:1px solid #cfcfcf;
+        font-size:16px;
+        outline:none;
+    }
+
+    /* SEND BUTTON */
+    .send-btn{
+        width:100%;
+        padding:16px;
+        background:#0c8c3d;
+        color:white;
+        border:none;
+        border-radius:14px;
+        font-size:18px;
+        font-weight:bold;
+        box-shadow:0 4px 10px rgba(0,0,0,0.15);
+        cursor:pointer;
+    }
+
+    .info-text{
+        margin-top:15px;
+        font-size:14px;
+        color:#555;
+        line-height:1.4;
+        text-align:center;
+    }
+
+    /* CUSTOM ALERT */
+    .alert-box{
+        position:fixed;
+        top:-200px;
+        left:50%;
+        transform:translateX(-50%);
+        min-width:300px;
+        background:white;
+        padding:20px;
+        border-radius:18px;
+        text-align:center;
+        box-shadow:0 4px 15px rgba(0,0,0,0.2);
+        transition:0.4s ease;
+        z-index:2000;
+    }
+
+    .alert-box.show{
+        top:30px;
+    }
+
+    .alert-box.success{
+        border-left:6px solid #0c8c3d;
+    }
+
+    .alert-box.fail{
+        border-left:6px solid #cc0000;
+    }
+
+    .alert-title{
+        font-size:20px;
+        margin-bottom:8px;
+        font-weight:bold;
+    }
+
+    .alert-success{
+        color:#0c8c3d;
+    }
+
+    .alert-fail{
+        color:#cc0000;
+    }
+
+    .alert-btn{
+        margin-top:15px;
+        padding:10px 18px;
+        background:#0c8c3d;
+        color:white;
+        border:none;
+        border-radius:10px;
+        font-weight:bold;
+        cursor:pointer;
+    }
+</style>
+
+</head>
+
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="back-btn" onclick="history.back()">←</div>
+    Transfer Pul
+</div>
+
+<form class="container" method="post">
+    {% csrf_token%}
+
+    <!-- FROM CARD SECTION -->
+    <div class="section">
+        <h2>Qaysi kartadan?</h2>
+
+        <div class="input-box">
+            <label>Kartani tanlang</label>
+            <select name="sender_card" id="from_card">
+                <option selected disabled>Kartani tanlang</option>
+                {% for i in request.user.my_cards.all %}
+                    <option value="{{i.number}}">💳 {{i.number}} — {{i.name}} - {{i.balance|intcomma}} so‘m</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <!-- RECIPIENT SECTION -->
+    <div class="section">
+        <h2>Kimga yuborasiz?</h2>
+
+        <div class="input-box">
+            <label>Karta raqami</label>
+            <input name="receiver_card" id="card_number" type="text" placeholder="0000 0000 0000 0000">
+        </div>
+
+        <div class="input-box">
+            <label>Summasi (UZS)</label>
+            <input name="amount" id="amount" type="number" placeholder="0">
+        </div>
+
+        <div class="input-box">
+            <label>Izoh (ixtiyoriy)</label>
+            <input name="comment" id="comment" type="text" placeholder="Masalan: to'lov, oila, do'st ...">
+        </div>
+    </div>
+
+    <button class="send-btn" type="submit" onclick="sendMoney()">Yuborish</button>
+
+    <p class="info-text">
+        Pul o'tkazmalari zudlik bilan amalga oshiriladi. Xatoliklardan saqlanish uchun karta raqamini to'g'ri kiriting.
+    </p>
+</form>
+
+{% include 'navbar.html' %}
+<!-- CUSTOM ALERT -->
+<div id="alertBox" class="alert-box"></div>
+
+
+<script>
+function showAlert(type, message, showReceipt=false){
+
+    const alertBox = document.getElementById("alertBox");
+
+    alertBox.className = "alert-box " + type;
+    alertBox.innerHTML = `
+        <div class="alert-title ${type === 'success' ? 'alert-success':'alert-fail'}">
+            ${type === 'success' ? '✅ Muvaffaqiyatli' : '❌ Xatolik'}
+        </div>
+        <div>${message}</div>
+        ${showReceipt ? `<button class="alert-btn" onclick="window.location.href='success.html'">Chekni olish</button>` : ""}
+    `;
+
+    alertBox.classList.add("show");
+
+    setTimeout(() => {
+        alertBox.classList.remove("show");
+    }, 3000);
+}
+
+
+function sendMoney(){
+
+    let card = document.getElementById("card_number").value.trim();
+    let amount = document.getElementById("amount").value.trim();
+
+    if(card.length < 16 || amount <= 0){
+        showAlert("fail", "Ma'lumotlar noto‘g‘ri yoki to‘liq emas.");
+        return;
+    }
+
+    // SUCCESS
+    showAlert("success", "Pul muvaffaqiyatli yuborildi!", true);
+}
+</script>
+
+</body>
+</html>
+    

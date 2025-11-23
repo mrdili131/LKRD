@@ -15,6 +15,14 @@ notification_type = (
     ("Warning","Warning"),
 )
 
+class Card(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='my_cards')
+    number = models.CharField(max_length=20,unique=True)
+    balance = models.DecimalField(default=0,max_digits=20,decimal_places=0)
+    valid = models.CharField(max_length=5)
+    name = models.CharField(max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True)
+
 class Notification(models.Model):
     user = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True)
     text = models.CharField(max_length=200)
@@ -27,6 +35,8 @@ class Notification(models.Model):
 class Transaction(models.Model):
     sender = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True,related_name='my_transactions')
     receiver = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True)
+    sender_card = models.ForeignKey(Card,on_delete=models.SET_NULL,null=True,blank=True,related_name='my_sendings')
+    receiver_card = models.ForeignKey(Card,on_delete=models.SET_NULL,null=True,blank=True)
     status = models.CharField(max_length=20,choices=transaction_status,default="Pending")
     amount = models.DecimalField(default=0,max_digits=20,decimal_places=0)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -35,17 +45,17 @@ class Transaction(models.Model):
         print("[LOGGER] Transaction is being created")
         is_new = self._state.adding
 
-        if is_new and self.sender and self.receiver:
+        if is_new and self.sender and self.receiver and self.sender_card and self.receiver_card:
             with transaction.atomic():
-                sender = User.objects.select_for_update().get(id=self.sender.id)
-                receiver = User.objects.select_for_update().get(id=self.receiver.id)
+                sender = Card.objects.select_for_update().get(id=self.sender_card.id)
+                receiver = Card.objects.select_for_update().get(id=self.receiver_card.id)
                 if (self.amount <= sender.balance):
                     sender.balance -= self.amount
                     receiver.balance += self.amount
                     sender.save()
                     receiver.save()
-                    Notification(user=sender,text=f'Siz {receiver.full_name} ga {self.amount} so\'m jo\'natdingiz',n_type='Ordinary').save()
-                    Notification(user=receiver,text=f'Sizning balansingizga {sender.full_name} tomonidan {self.amount} so\'m qabul qilindi',n_type='Ordinary').save()
+                    Notification(user=self.sender,text=f'Siz {self.receiver.full_name} ga {self.amount} so\'m jo\'natdingiz',n_type='Ordinary').save()
+                    Notification(user=self.receiver,text=f'Sizning balansingizga {self.sender.full_name} tomonidan {self.amount} so\'m qabul qilindi',n_type='Ordinary').save()
                     self.status = "Success"
                     print("[LOGGER] Transaction succeed")
                 else:
@@ -74,4 +84,11 @@ class Loan(models.Model):
 
     def __str__(self):
         return f'{self.user.full_name} | {self.amount} so\'m | {self.month_length} oy | {self.created_at.ctime()} da | status: {self.is_active}'
+    
+
+
+class News(models.Model):
+    title = models.CharField(max_length=20)
+    text = models.CharField(max_length=250)
+    created_at = models.DateTimeField(auto_now_add=True)
 

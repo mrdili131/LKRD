@@ -211,7 +211,7 @@
     <!-- TRANSACTION ITEMS -->
 
     {% for i in transactions %}
-        <div class="transaction-card">
+        <a href="{% url 'cheque' i.id %}" style="text-decoration: none;" class="transaction-card">
             <div class="left">
                 <div class="icon">💳</div>
                 <div>
@@ -224,7 +224,7 @@
             {% else %}
                 <div class="amount plus">+{{i.amount|intcomma}} so'm</div>
             {% endif %}
-        </div>
+        </a>
     {% endfor %}
 
     <!-- <div class="transaction-card">

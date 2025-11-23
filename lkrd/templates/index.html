@@ -174,15 +174,15 @@
     <!-- BALANCE CARD -->
     <div class="card">
         <h3>Sizning balansingiz</h3>
-        <div class="balance" id="balance">{{user.balance|intcomma}} soʻm</div>
+        <div class="balance" id="balance">{{balance|intcomma}} soʻm</div>
 
         <!-- ✅ ADDED REFRESH BUTTON -->
         <button class="refresh-btn" onclick="refreshBalance()">⟳</button>
 
         <div class="actions">
-            <div class="action-btn">Jo'natish</div>
+            <a style="text-decoration: none;" href="{% url 'transfer' %}" class="action-btn">Jo'natish</a>
             <a style="text-decoration: none;" href="{% url 'transactions' %}" class="action-btn">O'tkazmalar</a>
-            <div class="action-btn">Kartalar</div>
+            <a style="text-decoration: none;" href="{% url 'cards' %}" class="action-btn">Kartalar</a>
         </div>
     </div>
 
@@ -213,15 +213,20 @@
     <div class="section">
         <h2>Yangiliklar</h2>
 
-        <div class="news-card">
-            <h4>Keshbek oling!</h4>
-            <p>Endi har bir o'tkazma uchun keshbek.</p>
-        </div>
+        {% if news %}
+        {% for i in news %}
 
-        <div class="news-card">
-            <h4>Virtual Visa karta oching</h4>
-            <p>LKRD dan virtual visa karta xizmati.</p>
-        </div>
+            <div class="news-card">
+                <h4>{{i.title}}</h4>
+                <p>{{i.text}}</p>
+            </div>
+
+        {% endfor %}
+        {% else %}
+            <div class="news-card">
+                <p>Yangilik yo‘q</p>
+            </div>
+        {% endif %}
     </div>
 
     <!-- MORE FEATURES -->

@@ -1,13 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
-from .models import Transaction, Notification
+from .models import Transaction, Notification, Card, News
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q, Sum
 from django.utils import timezone
+from .forms import TransactionForm
 
 class IndexView(LoginRequiredMixin,View):
     def get(self,request):
-        return render(request,'index.html')
+        balance = Card.objects.filter(user=request.user).aggregate(total=Sum('balance'))['total'] or 0
+        news = News.objects.all().order_by("-created_at")
+        return render(request,'index.html',{"balance":balance,"news":news})
 
 class TransactionsView(LoginRequiredMixin,View):
     def get(self,request):
@@ -26,6 +29,44 @@ class TransactionsView(LoginRequiredMixin,View):
         spending = monthly_spending_obj.aggregate(total=Sum('amount'))['total'] or 0
         income = monthly_income_obj.aggregate(total=Sum('amount'))['total'] or 0
         return render(request,'transactions.html',{"transactions":transactions,"spending":spending,"income":income})
+
+class TransferView(LoginRequiredMixin,View):
+    def get(self,request):
+        form = TransactionForm()
+        return render(request,'transfer.html',{"form":form})
+    def post(self,request):
+        form = TransactionForm(request.POST)
+        print(form.errors)
+        if form.is_valid():
+            sender_card = Card.objects.get(number=form.cleaned_data["sender_card"])
+            receiver_card = Card.objects.get(number=form.cleaned_data["receiver_card"])
+            Transaction(
+                sender = request.user,
+                receiver = receiver_card.user,
+                sender_card = sender_card,
+                receiver_card = receiver_card,
+                status = "Pending",
+                amount = form.cleaned_data["amount"]
+            ).save()
+            redirect('transactions')
+        return render(request,'transfer.html',{"form":form})
+    
+class ChequeView(View):
+    def get(self,request,id):
+        transaction = Transaction.objects.get(id=id)
+        return render(request,'cheque.html',{"transaction":transaction})
+
+class CardsView(LoginRequiredMixin,View):
+    def get(self,request):
+        return render(request,'cards.html')
+    
+class EditCardView(LoginRequiredMixin,View):
+    def get(self,request,id):
+        card = Card.objects.get(id=id)
+        if card.user == request.user:
+            return render(request,'edit-card.html',{"card":card})
+        else:
+            return redirect("home")
 
 class SettingsView(LoginRequiredMixin,View):
     def get(self,request):

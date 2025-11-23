@@ -162,18 +162,18 @@
 
         <!-- AVATAR -->
         <div class="avatar-box">
-            <img src="https://via.placeholder.com/100" alt="User">
+            <img src="https://cdn.vectorstock.com/i/750p/06/32/social-network-default-profile-picture-avatar-icon-vector-57120632.avif" alt="User">
         </div>
 
         <!-- FORM -->
         <div class="form-group">
             <label>F.I.O</label>
-            <input type="text" placeholder="{{request.full_name}}">
+            <input readonly type="text" value="{{request.user.full_name}}" placeholder="{{request.user.full_name}}">
         </div>
 
         <div class="form-group">
             <label>Tel raqam</label>
-            <input type="tel" placeholder="+998 90 123 45 67">
+            <input readonly type="tel" value="{{request.user.phone_number}}" placeholder="{{request.user.phone_number}}">
         </div>
 
         <div class="form-group">
@@ -185,22 +185,22 @@
 
         <div class="form-group">
             <label>Hozirgi parol</label>
-            <input type="password" placeholder="••••••••">
+            <input readonly type="password" value="••••••••" placeholder="••••••••">
         </div>
 
         <div class="form-group">
             <label>Yangi parol</label>
-            <input type="password" placeholder="••••••••">
+            <input readonly type="password" value="••••••••" placeholder="••••••••">
         </div>
 
         <div class="form-group">
             <label>Yangi parolni tasdiqlang</label>
-            <input type="password" placeholder="••••••••">
+            <input readonly type="password" value="••••••••" placeholder="••••••••">
         </div>
 
         <div class="buttons">
-            <button class="cancel-btn">Bekor qilish</button>
-            <button class="save-btn">Saqlash</button>
+            <a href="{% url 'settings' %}" style="text-decoration: none;" class="cancel-btn">Bekor qilish</a>
+            <a href="{% url 'settings' %}" style="text-decoration: none;" class="save-btn">Saqlash</a>
         </div>
 
     </div>
